@@ -1,8 +1,11 @@
 import streamlit as st
 import pandas as pd
+import os
 
 st.set_page_config(page_title="Asistente de Evaluación Clínica", layout="centered")
-
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+csv_path = os.path.join(BASE_DIR, "pacientes_con_probabilidad.csv")
+img_dir  = os.path.join(BASE_DIR, "img")
 # ----------------------------
 # Función de predicción manual (simulada)
 # ----------------------------
@@ -194,7 +197,7 @@ elif menu == "Base de Pacientes":
     """)
 
     try:
-        df = pd.read_csv("pacientes_con_probabilidad.csv")
+        df = pd.read_csv(csv_path)
         df_sample = df.sample(n=15, random_state=42).reset_index(drop=True)
 
         # ---------------- Estilo de colores en la tabla ----------------
@@ -305,8 +308,8 @@ elif menu == "Red Neuronal Predictiva":
     """)
     col1, col2, col3 = st.columns([1, 3, 1])
     with col2:
-        st.image("img/baseline_model.png", caption="Arquitectura red")
-    
+        st.image(os.path.join(img_dir, "baseline_model.png"), caption="Arquitectura red")
+
 
     # ---------------------------
     st.subheader(" Curva de aprendizaje")
@@ -314,7 +317,7 @@ elif menu == "Red Neuronal Predictiva":
     La evolución de la pérdida (*loss*) en el entrenamiento y validación muestra una tendencia estable y descendente,
     lo que indica que el modelo **aprende correctamente sin sobreajustarse**.
     """)
-    st.image("img/loss_fuc.png", caption="Curva de pérdida en entrenamiento y validación")
+    st.image(os.path.join(img_dir, "loss_fuc.png"), caption="Curva de pérdida en entrenamiento y validación")
 
     # ---------------------------
     st.subheader(" Matriz de confusión")
@@ -332,7 +335,8 @@ elif menu == "Red Neuronal Predictiva":
     A pesar de estos esfuerzos, **no se lograron mejoras significativas en el rendimiento predictivo sobre la clase minoritaria**. Se concluye que, para avanzar, es necesario **contar con más muestras de pacientes con desenlace adverso (clase 0)**, 
     ya que el desbalance actual **limita la capacidad del modelo para aprender patrones representativos** en esos casos.
     """)
-    st.image("img/cfm.png", caption="Matriz de confusión en el conjunto de validación")
+  
+    st.image(os.path.join(img_dir, "cfm.png"), caption="Matriz de confusión en el conjunto de validación")
 
     # ---------------------------
     
